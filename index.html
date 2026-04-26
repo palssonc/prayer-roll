@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#5c3b24" />
+    <meta name="description" content="A local-first prayer roll you can install on your phone." />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="Prayer Roll" />
+    <link rel="manifest" href="./manifest.webmanifest" />
+    <link rel="icon" href="./assets/icon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="./assets/icon.svg" />
+    <link rel="stylesheet" href="./styles.css" />
+    <title>Prayer Roll</title>
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="hero">
+        <p class="eyebrow">Prayer Roll</p>
+        <h1>Keep today's names close at hand.</h1>
+        <p class="hero-copy">
+          Add names, notes, and prayer rhythms. When a prayer run ends, the app brings it
+          back for renewal so nothing quietly slips away.
+        </p>
+      </header>
+
+      <nav class="menu" aria-label="Main menu">
+        <button class="menu-button is-active" data-view-target="add-view" type="button">
+          Add Names
+        </button>
+        <button class="menu-button" data-view-target="roll-view" type="button">
+          Prayer Roll
+          <span class="menu-badge" id="renewal-badge" hidden>0</span>
+        </button>
+      </nav>
+
+      <main>
+        <section class="view is-active" id="add-view" aria-labelledby="add-view-title">
+          <div class="panel">
+            <div class="panel-heading">
+              <p class="section-kicker">Menu 1</p>
+              <h2 id="add-view-title">Add to the prayer roll</h2>
+            </div>
+
+            <form id="entry-form" class="entry-form">
+              <label class="field">
+                <span>Name</span>
+                <input id="name" name="name" type="text" maxlength="80" required />
+              </label>
+
+              <label class="field">
+                <span>Why I'm including them</span>
+                <textarea id="note" name="note" rows="4" maxlength="280" required></textarea>
+              </label>
+
+              <label class="field">
+                <span>How often</span>
+                <select id="cadence" name="cadence" required>
+                  <option value="daily_week">Daily for a week</option>
+                  <option value="weekly_two_months">Once a week for two months</option>
+                </select>
+              </label>
+
+              <button class="primary-button" type="submit">Add to Prayer Roll</button>
+            </form>
+
+            <p class="form-status" id="form-status" role="status" aria-live="polite"></p>
+          </div>
+        </section>
+
+        <section class="view" id="roll-view" aria-labelledby="roll-view-title">
+          <div class="panel">
+            <div class="panel-heading">
+              <p class="section-kicker">Menu 2</p>
+              <h2 id="roll-view-title">Today's Prayer Roll</h2>
+              <p class="roll-date" id="roll-date"></p>
+            </div>
+
+            <div class="renewal-strip" id="renewal-strip" hidden>
+              <p id="renewal-strip-text"></p>
+              <button class="secondary-button" id="open-renewals" type="button">
+                Review Renewals
+              </button>
+            </div>
+
+            <div class="empty-state" id="empty-state" hidden>
+              No names are due right now. When a new date arrives, it will appear here.
+            </div>
+
+            <div class="due-list" id="due-list" aria-live="polite"></div>
+
+            <button class="primary-button" id="end-prayer" type="button">
+              End of Prayer
+            </button>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <dialog class="renewal-dialog" id="renewal-dialog">
+      <form method="dialog" class="dialog-card">
+        <div class="dialog-header">
+          <p class="section-kicker">Renewal</p>
+          <h2>Review completed prayer runs</h2>
+          <p class="dialog-copy">
+            Choose what should happen next for each finished name.
+          </p>
+        </div>
+
+        <div class="renewal-list" id="renewal-list"></div>
+
+        <div class="dialog-actions">
+          <button class="secondary-button" id="close-renewal-dialog" value="cancel" type="submit">
+            Close
+          </button>
+        </div>
+      </form>
+    </dialog>
+
+    <template id="due-item-template">
+      <article class="due-item">
+        <div class="due-copy">
+          <p class="due-name"></p>
+          <p class="due-note"></p>
+        </div>
+        <p class="due-meta"></p>
+      </article>
+    </template>
+
+    <template id="renewal-item-template">
+      <article class="renewal-item">
+        <div class="renewal-copy">
+          <p class="renewal-name"></p>
+          <p class="renewal-note"></p>
+          <p class="renewal-meta"></p>
+        </div>
+        <div class="renewal-actions">
+          <button class="secondary-button renewal-action" data-action="daily_week" type="button">
+            Daily for a week
+          </button>
+          <button
+            class="secondary-button renewal-action"
+            data-action="weekly_two_months"
+            type="button"
+          >
+            Weekly for two months
+          </button>
+          <button class="danger-button renewal-action" data-action="remove" type="button">
+            Remove from Roll
+          </button>
+        </div>
+      </article>
+    </template>
+
+    <script type="module" src="./js/app.js"></script>
+  </body>
+</html>
